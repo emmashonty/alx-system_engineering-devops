@@ -1,0 +1,15 @@
+[Unit]
+Description=gunicorn daemon
+After=network.target
+After=syslog.target
+
+[Service]
+User=nginx
+Group=nginx
+EnvironmentFile=/etc/api.gunicorn
+WorkingDirectory=/var/webapps/api
+ExecStart=/var/webapps/api/bin/gunicorn --workers 5 --bind unix:///var/webapps/api/api.sock api.wsgi:application --access-logfile /var/webapps/api/log/access.log --error-logfile /var/webapps/api/log/error.log
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
